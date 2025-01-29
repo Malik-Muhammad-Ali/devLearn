@@ -1,5 +1,5 @@
 import "./style.css";
-// import React from 'react'
+import { Link } from "react-router-dom";
 
 const Signup = () => {
   return (
@@ -18,17 +18,12 @@ const Signup = () => {
               className="absolute triangle  min-h-screen right-0 w-16"
               style={{}}
             ></div>
-            <a
-              href="https://codepen.io/uidesignhub"
-              target="_blank"
-              title="codepen aji"
-              className="flex absolute top-5 text-center text-gray-100 focus:outline-none"
-            >
+            <p className="flex absolute top-5 text-center text-gray-100 focus:outline-none">
               {/* Fourth Image */}
               <p className="text-xl ml-3">
                 Dev<strong>Learn</strong>
               </p>{" "}
-            </a>
+            </p>
             <img
               src="https://jasper-pimstorage-skullcandy.s3.us-west-1.amazonaws.com/bd2253a9671dac36a95faf821b52e78935050140be1718ce001f6aace45cf25c.png"
               className="h-96 absolute right-5 mr-5"
@@ -143,12 +138,12 @@ const Signup = () => {
                 {/* Already have account */}
                 <p className="flex flex-col items-center justify-center mt-10 text-center text-md text-gray-500">
                   <span>Already Have an Account?</span>
-                  <a
-                    href="#"
+                  <Link
+                    to="/signin"
                     className="text-indigo-400 hover:text-blue-500 no-underline hover:underline cursor-pointer transition ease-in duration-300"
                   >
                     Sign in
-                  </a>
+                  </Link>
                 </p>
               </form>
             </div>
