@@ -44,13 +44,12 @@ const Signup = () => {
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
-      console.log("Form Submitted", values);
       const response = await signup(values);
       setSubmitting(false);
 
       if (response.status === "success") {
         toast.success("Signup successful! Redirecting to login...");
-        setTimeout(() => navigate("/signin"), 2000);
+        setTimeout(() => navigate("/signin", { replace: true }), 2000);
       } else if (response.status === "already exists") {
         toast.error("User already exists. Please try logging in.");
       } else {
