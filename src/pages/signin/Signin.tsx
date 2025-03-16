@@ -1,9 +1,9 @@
 import "./style.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaEnvelope, FaLock } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
 import useAppStore from "../../zustand/store";
@@ -19,12 +19,66 @@ const Signin = () => {
 
   // States
   const [showPassword, setShowPassword] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+
+    // Add animated background shapes
+    const container = document.querySelector(".signin-container");
+    if (container) {
+      const animatedBg = document.createElement("div");
+      animatedBg.className = "animated-bg";
+
+      const shape1 = document.createElement("div");
+      shape1.className = "animated-bg-shape animated-bg-shape-1";
+
+      const shape2 = document.createElement("div");
+      shape2.className = "animated-bg-shape animated-bg-shape-2";
+
+      const shape3 = document.createElement("div");
+      shape3.className = "animated-bg-shape animated-bg-shape-3";
+
+      animatedBg.appendChild(shape1);
+      animatedBg.appendChild(shape2);
+      animatedBg.appendChild(shape3);
+
+      container.appendChild(animatedBg);
+
+      // Add floating particles
+      for (let i = 0; i < 20; i++) {
+        const size = Math.random() * 6 + 2;
+        const particle = document.createElement("div");
+        particle.className = "particle";
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+        particle.style.opacity = `${Math.random() * 0.5}`;
+
+        // Set random movement
+        const x = (Math.random() - 0.5) * 100;
+        const y = (Math.random() - 0.5) * 100;
+        particle.style.setProperty("--x", `${x}px`);
+        particle.style.setProperty("--y", `${y}px`);
+
+        // Set animation
+        particle.style.animation = `moveParticle ${
+          Math.random() * 10 + 10
+        }s infinite alternate ease-in-out`;
+
+        container.appendChild(particle);
+      }
+    }
+  }, []);
 
   // Toggle Password Visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-  // Handle Signup
+
+  // Handle Signin
   const handleSignin = async (
     values: any,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
@@ -42,7 +96,7 @@ const Signin = () => {
         toast.error("Signin failed. Please try again later.");
       }
     } catch (error) {
-      console.error("Signup error", error);
+      console.error("Signin error", error);
       toast.error("An error occurred. Please try again.");
       setSubmitting(false);
     }
@@ -50,147 +104,186 @@ const Signin = () => {
 
   return (
     <>
-      <ToastContainer />
-      <div className="relative min-h-screen flex ">
-        <div className="flex flex-col sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-auto min-w-0 bg-white">
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <div className="signin-container relative min-h-screen">
+        {/* Animated background */}
+        <ul className="circles">
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+        </ul>
+
+        <div className="form-container">
+          <div className="glow-orb glow-orb-1"></div>
+          <div className="glow-orb glow-orb-2"></div>
+
           <div
-            className="sm:w-1/2 xl:w-2/5 h-full hidden md:flex flex-auto items-center justify-start p-10 overflow-hidden bg-purple-900 text-white bg-no-repeat bg-cover relative"
-            style={{
-              backgroundImage:
-                "url(https://images.unsplash.com/photo-1579451861283-a2239070aaa9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1950&amp;q=80)",
-            }}
+            className={`signin-card p-8 ${
+              mounted ? "animate-fadeIn" : "opacity-0"
+            }`}
           >
-            <div className="absolute bg-gradient-to-b from-blue-900 to-gray-900 opacity-75 inset-0 z-0"></div>
-            <div
-              className="absolute triangle  min-h-screen right-0 w-16"
-              style={{}}
-            ></div>
-            <p className="flex absolute top-5 text-center text-gray-100 focus:outline-none">
-              {/* Fourth Image */}
-              <p className="text-xl ml-3">
+            <div className="card-header text-center">
+              <span className="brand-logo">
                 Dev<strong>Learn</strong>
-              </p>{" "}
-            </p>
-            <img
-              src="https://jasper-pimstorage-skullcandy.s3.us-west-1.amazonaws.com/bd2253a9671dac36a95faf821b52e78935050140be1718ce001f6aace45cf25c.png"
-              className="h-96 absolute right-5 mr-5"
-            />
-            <div className="w-full  max-w-md z-10">
-              <div className="sm:text-4xl xl:text-5xl font-bold leading-tight mb-6">
-                Dev Learn
-              </div>
-              <div className="sm:text-sm xl:te  xt-md text-gray-200 font-normal">
-                {" "}
-                Welcome back! Log in to access your personalized quizzes and
-                continue your learning journey. With every quiz, track your
-                progress and unlock resources tailored to your needs. Stay
-                ahead, improve your skills, and let AI guide you to success.
-                Sign in now and pick up right where you left off!
-              </div>
+              </span>
+              <h2 className="text-3xl font-bold text-slate-800 mb-2">
+                Welcome Back
+              </h2>
+              <p className="text-sm text-slate-600">
+                Sign in to continue your learning journey
+              </p>
             </div>
-            <ul className="circles">
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-            </ul>
-          </div>
-          <div className="md:flex md:items-center md:justify-center w-full sm:w-auto md:h-full xl:w-2/5 p-8 md:p-10 lg:p-14 sm:rounded-lg md:rounded-none bg-white">
-            <div className="max-w-md w-full space-y-8">
-              <div className="text-center">
-                <h2 className="mt-6 text-3xl font-bold text-gray-900">
-                  Join Us!
-                </h2>
-                <p className="mt-2 text-sm text-gray-500">
-                  Please sign up to create your account
-                </p>
-              </div>
 
-              <Formik
-                initialValues={{
-                  email: "",
-                  password: "",
-                }}
-                validationSchema={SigninSchema}
-                onSubmit={handleSignin}
-              >
-                {({ isSubmitting }) => (
-                  <Form className="mt-8 space-y-6">
-                    {/* Email */}
-                    <div className="relative flex flex-col items-start">
-                      <label className="ml-3 text-sm font-bold text-gray-700">
-                        Email
-                      </label>
-                      <Field
-                        className="w-full text-base px-4 py-2 border-b border-gray-300 focus:outline-none rounded-2xl focus:border-indigo-500"
-                        name="email"
-                        type="email"
-                        placeholder="example@gmail.com"
-                      />
-                      <ErrorMessage
-                        name="email"
-                        component="div"
-                        className="text-red-500 text-sm"
-                      />
+            <Formik
+              initialValues={{
+                email: "",
+                password: "",
+              }}
+              validationSchema={SigninSchema}
+              onSubmit={handleSignin}
+            >
+              {({ isSubmitting }) => (
+                <Form className="space-y-6">
+                  {/* Email */}
+                  <div className="relative">
+                    <div className="input-icon-container">
+                      <FaEnvelope className="animated-icon" />
                     </div>
+                    <Field
+                      className="form-input w-full text-base py-3 rounded-lg border focus:outline-none"
+                      name="email"
+                      type="email"
+                      placeholder=" "
+                    />
+                    <label className="floating-label">Email</label>
+                    <ErrorMessage
+                      name="email"
+                      component="div"
+                      className="text-red-500 text-sm mt-1"
+                    />
+                  </div>
 
-                    {/* Password */}
-                    <div className="mt-8 flex flex-col items-start relative">
-                      <label className="ml-3 text-sm font-bold text-gray-700">
-                        Password
-                      </label>
-                      <div className="relative w-full">
-                        <Field
-                          className="w-full text-base px-4 py-2 border-b rounded-2xl border-gray-300 focus:outline-none focus:border-indigo-500"
-                          name="password"
-                          type={showPassword ? "text" : "password"}
-                          placeholder="Enter your password"
-                        />
-                        <span
-                          className="absolute right-4 top-3 cursor-pointer"
-                          onClick={togglePasswordVisibility}
-                        >
-                          {showPassword ? <FaEyeSlash /> : <FaEye />}
-                        </span>
-                      </div>
-                      <ErrorMessage
-                        name="password"
-                        component="div"
-                        className="text-red-500 text-sm"
-                      />
+                  {/* Password */}
+                  <div className="relative mt-6">
+                    <div className="input-icon-container">
+                      <FaLock className="animated-icon" />
                     </div>
+                    <Field
+                      className="form-input w-full text-base py-3 rounded-lg border focus:outline-none"
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder=" "
+                    />
+                    <label className="floating-label">Password</label>
+                    <div
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600"
+                      onClick={togglePasswordVisibility}
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </div>
+                    <ErrorMessage
+                      name="password"
+                      component="div"
+                      className="text-red-500 text-sm mt-1"
+                    />
+                  </div>
 
-                    {/* Button */}
-                    <div>
-                      <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="w-full flex justify-center bg-gradient-to-r from-indigo-500 to-blue-600 hover:bg-gradient-to-l hover:from-blue-500 hover:to-indigo-600 text-gray-100 p-4 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
+                  {/* Remember me & Forgot Password */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <input
+                        id="remember-me"
+                        name="remember-me"
+                        type="checkbox"
+                        className="custom-checkbox"
+                        checked={rememberMe}
+                        onChange={() => setRememberMe(!rememberMe)}
+                      />
+                      <label
+                        htmlFor="remember-me"
+                        className="ml-2 block text-sm text-slate-600"
                       >
-                        {isSubmitting ? "Signing Up..." : "Sign Up"}
-                      </button>
+                        Remember me
+                      </label>
                     </div>
-
-                    {/* Already have account */}
-                    <p className="flex flex-col items-center justify-center mt-10 text-center text-md text-gray-500">
-                      <span>Don't Have an Account?</span>
+                    <div className="text-sm">
                       <Link
-                        to="/signup"
-                        className="text-indigo-400 hover:text-blue-500 no-underline hover:underline cursor-pointer transition ease-in duration-300"
+                        to="/forgot-password"
+                        className="forgot-password-link text-blue-600 hover:text-blue-800 font-medium"
                       >
-                        Sign up
+                        Forgot password?
                       </Link>
-                    </p>
-                  </Form>
-                )}
-              </Formik>
-            </div>
+                    </div>
+                  </div>
+
+                  {/* Button */}
+                  <div className="mt-8">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="signin-button pulse w-full flex justify-center text-white p-4 rounded-lg tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
+                    >
+                      {isSubmitting ? (
+                        <div className="flex items-center">
+                          <svg
+                            className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          Signing In...
+                        </div>
+                      ) : (
+                        "Sign In"
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Don't have account */}
+                  <div className="flex items-center justify-center mt-8 text-center text-sm text-slate-600">
+                    <span>Don't have an account?</span>
+                    <Link
+                      to="/signup"
+                      className="signup-link ml-2 text-blue-600 hover:text-blue-800 font-medium cursor-pointer"
+                    >
+                      Sign up
+                    </Link>
+                  </div>
+                </Form>
+              )}
+            </Formik>
           </div>
         </div>
       </div>

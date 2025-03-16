@@ -1,9 +1,9 @@
 import "./style.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaEnvelope, FaLock, FaUser, FaUserTag } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
 import useAppStore from "../../zustand/store";
@@ -13,7 +13,7 @@ const SignupSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
   password: Yup.string()
-    .min(6, "Password must be at least 8 characters")
+    .min(6, "Password must be at least 6 characters")
     .required("Password is required"),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), undefined], "Passwords must match")
@@ -27,6 +27,56 @@ const Signup = () => {
   // States
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    
+    // Add animated background shapes
+    const container = document.querySelector('.signup-container');
+    if (container) {
+      const animatedBg = document.createElement('div');
+      animatedBg.className = 'animated-bg';
+      
+      const shape1 = document.createElement('div');
+      shape1.className = 'animated-bg-shape animated-bg-shape-1';
+      
+      const shape2 = document.createElement('div');
+      shape2.className = 'animated-bg-shape animated-bg-shape-2';
+      
+      const shape3 = document.createElement('div');
+      shape3.className = 'animated-bg-shape animated-bg-shape-3';
+      
+      animatedBg.appendChild(shape1);
+      animatedBg.appendChild(shape2);
+      animatedBg.appendChild(shape3);
+      
+      container.appendChild(animatedBg);
+      
+      // Add floating particles
+      for (let i = 0; i < 20; i++) {
+        const size = Math.random() * 6 + 2;
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+        particle.style.opacity = `${Math.random() * 0.5}`;
+        
+        // Set random movement
+        const x = (Math.random() - 0.5) * 100;
+        const y = (Math.random() - 0.5) * 100;
+        particle.style.setProperty('--x', `${x}px`);
+        particle.style.setProperty('--y', `${y}px`);
+        
+        // Set animation
+        particle.style.animation = `moveParticle ${Math.random() * 10 + 10}s infinite alternate ease-in-out`;
+        
+        container.appendChild(particle);
+      }
+    }
+  }, []);
 
   // Toggle Password Visibility
   const togglePasswordVisibility = () => {
@@ -62,218 +112,212 @@ const Signup = () => {
     }
   };
 
-  // Component
   return (
     <>
-      <ToastContainer />
-      <div className="relative min-h-screen flex ">
-        <div className="flex flex-col sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-auto min-w-0 bg-white">
-          <div
-            className="sm:w-1/2 xl:w-2/5 h-full hidden md:flex flex-auto items-center justify-start p-10 overflow-hidden bg-purple-900 text-white bg-no-repeat bg-cover relative"
-            style={{
-              backgroundImage:
-                "url(https://images.unsplash.com/photo-1579451861283-a2239070aaa9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1950&amp;q=80)",
-            }}
-          >
-            <div className="absolute bg-gradient-to-b from-blue-900 to-gray-900 opacity-75 inset-0 z-0"></div>
-            <div
-              className="absolute triangle  min-h-screen right-0 w-16"
-              style={{}}
-            ></div>
-            <p className="flex absolute top-5 text-center text-gray-100 focus:outline-none">
-              <span className="text-xl ml-3">
-                {" "}
-                {/* ✅ Change <p> to <span> */}
+      <ToastContainer 
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <div className="signup-container relative min-h-screen">
+        {/* Animated background */}
+        <ul className="circles">
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+        </ul>
+        
+        <div className="form-container">
+          <div className="glow-orb glow-orb-1"></div>
+          <div className="glow-orb glow-orb-2"></div>
+          
+          <div className={`signup-card p-8 md:p-10 ${mounted ? 'animate-fadeIn' : 'opacity-0'}`}>
+            <div className="card-header text-center">
+              <span className="brand-logo">
                 Dev<strong>Learn</strong>
               </span>
-            </p>
-
-            <img
-              src="https://jasper-pimstorage-skullcandy.s3.us-west-1.amazonaws.com/bd2253a9671dac36a95faf821b52e78935050140be1718ce001f6aace45cf25c.png"
-              className="h-96 absolute right-5 mr-5"
-            />
-            <div className="w-full  max-w-md z-10">
-              <div className="sm:text-4xl xl:text-5xl font-bold leading-tight mb-6">
-                Dev Learn
-              </div>
-              <div className="sm:text-sm xl:text-md text-gray-200 font-normal">
-                {" "}
-                Welcome to our platform, where learning meets AI! Unlock
-                personalized quizzes that challenge your skills and help you
-                grow. After completing each quiz, get an instant performance
-                report along with tailored resources to help you improve. Start
-                your journey today and watch your skills evolve with every quiz
-                you take!
-              </div>
+              <h2 className="text-3xl font-bold text-slate-800 mb-2">
+                Create Account
+              </h2>
+              <p className="text-sm text-slate-600">
+                Sign up to start your learning journey
+              </p>
             </div>
-            <ul className="circles">
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-            </ul>
-          </div>
-          <div className="md:flex md:items-center md:justify-center w-full sm:w-auto md:h-full xl:w-2/5 p-8 md:p-10 lg:p-14 sm:rounded-lg md:rounded-none bg-white">
-            <div className="max-w-md w-full space-y-8">
-              <div className="text-center">
-                <h2 className="mt-6 text-3xl font-bold text-gray-900">
-                  Join Us!
-                </h2>
-                <p className="mt-2 text-sm text-gray-500">
-                  Please sign up to create your account
-                </p>
-              </div>
 
-              <Formik
-                initialValues={{
-                  name: "",
-                  username: "",
-                  email: "",
-                  password: "",
-                  confirmPassword: "",
-                }}
-                validationSchema={SignupSchema}
-                onSubmit={handleSignup}
-              >
-                {({ isSubmitting }) => (
-                  <Form className="mt-8 space-y-6">
-                    {/* Name */}
-                    <div className="relative flex flex-col items-start">
-                      <label className="ml-3 text-sm font-bold text-gray-700">
-                        Name
-                      </label>
-                      <Field
-                        className="w-full text-base px-4 py-2 border-b border-gray-300 focus:outline-none rounded-2xl focus:border-indigo-500"
-                        name="name"
-                        type="text"
-                        placeholder="Enter Your Name"
-                      />
-                      <ErrorMessage
-                        name="name"
-                        component="div"
-                        className="text-red-500 text-sm"
-                      />
+            <Formik
+              initialValues={{
+                name: "",
+                username: "",
+                email: "",
+                password: "",
+                confirmPassword: "",
+              }}
+              validationSchema={SignupSchema}
+              onSubmit={handleSignup}
+            >
+              {({ isSubmitting }) => (
+                <Form className="space-y-5">
+                  {/* Name */}
+                  <div className="relative">
+                    <div className="input-icon-container">
+                      <FaUser className="animated-icon" />
                     </div>
+                    <Field
+                      className="form-input w-full text-base py-3 rounded-lg border focus:outline-none"
+                      name="name"
+                      type="text"
+                      placeholder=" "
+                    />
+                    <label className="floating-label">Full Name</label>
+                    <ErrorMessage
+                      name="name"
+                      component="div"
+                      className="text-red-500 text-sm mt-1"
+                    />
+                  </div>
 
+                  {/* Username and Email in one row */}
+                  <div className="flex flex-col md:flex-row gap-4">
                     {/* Username */}
-                    <div className="relative flex flex-col items-start">
-                      <label className="ml-3 text-sm font-bold text-gray-700">
-                        Username
-                      </label>
+                    <div className="relative flex-1">
+                      <div className="input-icon-container">
+                        <FaUserTag className="animated-icon" />
+                      </div>
                       <Field
-                        className="w-full text-base px-4 py-2 border-b border-gray-300 focus:outline-none rounded-2xl focus:border-indigo-500"
+                        className="form-input w-full text-base py-3 rounded-lg border focus:outline-none"
                         name="username"
                         type="text"
-                        placeholder="Enter Username"
+                        placeholder=" "
                       />
+                      <label className="floating-label">Username</label>
                       <ErrorMessage
                         name="username"
                         component="div"
-                        className="text-red-500 text-sm"
+                        className="text-red-500 text-sm mt-1"
                       />
                     </div>
 
                     {/* Email */}
-                    <div className="relative flex flex-col items-start">
-                      <label className="ml-3 text-sm font-bold text-gray-700">
-                        Email
-                      </label>
+                    <div className="relative flex-1">
+                      <div className="input-icon-container">
+                        <FaEnvelope className="animated-icon" />
+                      </div>
                       <Field
-                        className="w-full text-base px-4 py-2 border-b border-gray-300 focus:outline-none rounded-2xl focus:border-indigo-500"
+                        className="form-input w-full text-base py-3 rounded-lg border focus:outline-none"
                         name="email"
                         type="email"
-                        placeholder="example@gmail.com"
+                        placeholder=" "
                       />
+                      <label className="floating-label">Email</label>
                       <ErrorMessage
                         name="email"
                         component="div"
-                        className="text-red-500 text-sm"
+                        className="text-red-500 text-sm mt-1"
                       />
                     </div>
+                  </div>
 
+                  {/* Password and Confirm Password in one row */}
+                  <div className="flex flex-col md:flex-row gap-4">
                     {/* Password */}
-                    <div className="mt-8 flex flex-col items-start relative">
-                      <label className="ml-3 text-sm font-bold text-gray-700">
-                        Password
-                      </label>
-                      <div className="relative w-full">
-                        <Field
-                          className="w-full text-base px-4 py-2 border-b rounded-2xl border-gray-300 focus:outline-none focus:border-indigo-500"
-                          name="password"
-                          type={showPassword ? "text" : "password"}
-                          placeholder="Enter your password"
-                        />
-                        <span
-                          className="absolute right-4 top-3 cursor-pointer"
-                          onClick={togglePasswordVisibility}
-                        >
-                          {showPassword ? <FaEyeSlash /> : <FaEye />}
-                        </span>
+                    <div className="relative flex-1">
+                      <div className="input-icon-container">
+                        <FaLock className="animated-icon" />
+                      </div>
+                      <Field
+                        className="form-input w-full text-base py-3 rounded-lg border focus:outline-none"
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder=" "
+                      />
+                      <label className="floating-label">Password</label>
+                      <div
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600"
+                        onClick={togglePasswordVisibility}
+                      >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
                       </div>
                       <ErrorMessage
                         name="password"
                         component="div"
-                        className="text-red-500 text-sm"
+                        className="text-red-500 text-sm mt-1"
                       />
                     </div>
 
                     {/* Confirm Password */}
-                    <div className="mt-8 flex flex-col items-start relative">
-                      <label className="ml-3 text-sm font-bold text-gray-700">
-                        Confirm Password
-                      </label>
-                      <div className="relative w-full">
-                        <Field
-                          className="w-full text-base px-4 py-2 border-b rounded-2xl border-gray-300 focus:outline-none focus:border-indigo-500"
-                          name="confirmPassword"
-                          type={showConfirmPassword ? "text" : "password"}
-                          placeholder="Enter Confirm Password"
-                        />
-                        <span
-                          className="absolute right-4 top-3 cursor-pointer"
-                          onClick={toggleConfirmPasswordVisibility}
-                        >
-                          {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                        </span>
+                    <div className="relative flex-1">
+                      <div className="input-icon-container">
+                        <FaLock className="animated-icon" />
+                      </div>
+                      <Field
+                        className="form-input w-full text-base py-3 rounded-lg border focus:outline-none"
+                        name="confirmPassword"
+                        type={showConfirmPassword ? "text" : "password"}
+                        placeholder=" "
+                      />
+                      <label className="floating-label">Confirm</label>
+                      <div
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600"
+                        onClick={toggleConfirmPasswordVisibility}
+                      >
+                        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                       </div>
                       <ErrorMessage
                         name="confirmPassword"
                         component="div"
-                        className="text-red-500 text-sm"
+                        className="text-red-500 text-sm mt-1"
                       />
                     </div>
+                  </div>
 
-                    {/* Button */}
-                    <div>
-                      <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="w-full flex justify-center bg-gradient-to-r from-indigo-500 to-blue-600 hover:bg-gradient-to-l hover:from-blue-500 hover:to-indigo-600 text-gray-100 p-4 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
-                      >
-                        {isSubmitting ? "Signing Up..." : "Sign Up"}
-                      </button>
-                    </div>
+                  {/* Button */}
+                  <div className="mt-8">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="signup-button pulse w-full flex justify-center text-white p-4 rounded-lg tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
+                    >
+                      {isSubmitting ? (
+                        <div className="flex items-center">
+                          <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Creating Account...
+                        </div>
+                      ) : (
+                        "Create Account"
+                      )}
+                    </button>
+                  </div>
 
-                    {/* Already have account */}
-                    <p className="flex flex-col items-center justify-center mt-10 text-center text-md text-gray-500">
-                      <span>Already Have an Account?</span>
-                      <Link
-                        to="/signin"
-                        className="text-indigo-400 hover:text-blue-500 no-underline hover:underline cursor-pointer transition ease-in duration-300"
-                      >
-                        Sign in
-                      </Link>
-                    </p>
-                  </Form>
-                )}
-              </Formik>
-            </div>
+                  {/* Already have account */}
+                  <div className="flex items-center justify-center mt-8 text-center text-sm text-slate-600">
+                    <span>Already have an account?</span>
+                    <Link
+                      to="/signin"
+                      className="signin-link ml-2 text-blue-600 hover:text-blue-800 font-medium"
+                    >
+                      Sign in
+                    </Link>
+                  </div>
+                </Form>
+              )}
+            </Formik>
           </div>
         </div>
       </div>

@@ -1,100 +1,220 @@
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const HeroSection = () => {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.3 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6 }
+    }
+  };
+
   return (
-    <>
-      <div className="relative bg-gray-50">
-        <div className="absolute bottom-0 right-0 overflow-hidden lg:inset-y-0 z-0">
-          <img
-            className="w-auto h-full"
-            src="https://d33wubrfki0l68.cloudfront.net/1e0fc04f38f5896d10ff66824a62e466839567f8/699b5/images/hero/3/background-pattern.png"
-            alt=""
-          />
+    <div className="relative min-h-screen bg-white overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 bg-[#FCFAFF]">
+        <div className="absolute right-0 top-0 w-1/3 h-screen bg-gradient-to-l from-indigo-50 to-transparent"></div>
+        <div className="absolute left-0 bottom-0 w-1/3 h-screen bg-gradient-to-t from-purple-50 to-transparent"></div>
+        <div className="absolute inset-0" style={{
+          backgroundImage: 'radial-gradient(#E9D5FF 1px, transparent 1px)',
+          backgroundSize: '40px 40px'
+        }}></div>
         </div>
 
-        <section className="relative py-12 sm:py-16 lg:pt-20 lg:pb-36">
-          <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
-            <div className="grid grid-cols-1 gap-y-8 lg:items-center lg:grid-cols-2 sm:gap-y-20 xl:grid-cols-5">
-              <div className="text-center xl:col-span-2 lg:text-left md:px-16 lg:px-0">
-                <div className="max-w-sm mx-auto sm:max-w-md md:max-w-full">
-                  <h1 className="text-4xl font-bold leading-tight text-gray-900 sm:text-5xl sm:leading-tight lg:text-6xl lg:leading-tight font-pj">
-                    Unleash Your Potential, Achieve the Extraordinary
+      <section className="relative py-20 lg:py-32">
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-8 items-center"
+          >
+            <motion.div variants={itemVariants} className="text-center lg:text-left">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="relative"
+              >
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: "100%" }}
+                  transition={{ duration: 1, delay: 0.5 }}
+                  className="absolute -left-4 top-1/2 h-1 bg-indigo-600 transform -translate-y-1/2"
+                ></motion.div>
+                <h1 className="relative text-5xl font-black tracking-tight text-gray-900 sm:text-6xl lg:text-7xl">
+                  <span className="block text-indigo-600 mb-2">
+                    Transform Your
+                  </span>
+                  <span className="block">Learning Journey</span>
                   </h1>
+              </motion.div>
+              
+              <motion.p
+                variants={itemVariants}
+                className="mt-8 text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto lg:mx-0"
+              >
+                Experience the future of education with our AI-powered platform. Get personalized learning paths, real-time feedback, and join a thriving community of learners.
+              </motion.p>
 
-                  <div className="mt-8 lg:mt-12 lg:flex lg:items-center">
-                    <div className="flex justify-center flex-shrink-0 -space-x-4 overflow-hidden lg:justify-start">
-                      <img
-                        className="inline-block rounded-full w-14 h-14 ring-2 ring-white"
-                        src="https://d33wubrfki0l68.cloudfront.net/3bfa6da479d6b9188c58f2d9a8d33350290ee2ef/301f1/images/hero/3/avatar-male.png"
+              <motion.div
+                variants={itemVariants}
+                className="mt-10 flex flex-col sm:flex-row justify-center lg:justify-start gap-6"
+              >
+                <Link
+                  to="/signin"
+                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-indigo-600 rounded-xl shadow-xl hover:bg-indigo-700 transform hover:-translate-y-1 transition-all duration-200"
+                >
+                  Start Learning Free
+                  <motion.svg
+                    className="ml-2 w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ repeat: Infinity, duration: 1.5 }}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </motion.svg>
+                </Link>
+
+                <Link
+                  to="/signup"
+                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-indigo-600 bg-indigo-50 rounded-xl hover:bg-indigo-100 transform hover:-translate-y-1 transition-all duration-200"
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                  Join Community
+                </Link>
+              </motion.div>
+
+              <motion.div
+                variants={itemVariants}
+                className="mt-16 grid grid-cols-1 sm:grid-cols-2 gap-8"
+              >
+                <div className="flex items-center p-6 bg-white rounded-2xl shadow-lg transform hover:-translate-y-1 transition-all duration-200">
+                  <div className="flex -space-x-4">
+                    {[1, 2, 3].map((i) => (
+                      <motion.img
+                        key={i}
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: i * 0.2 }}
+                        className="w-12 h-12 rounded-full border-2 border-white"
+                        src={`https://randomuser.me/api/portraits/men/${i + 20}.jpg`}
                         alt=""
                       />
-                      <img
-                        className="inline-block rounded-full w-14 h-14 ring-2 ring-white"
-                        src="https://d33wubrfki0l68.cloudfront.net/b52fa09a115db3a80ceb2d52c275fadbf84cf8fc/7fd8a/images/hero/3/avatar-female-1.png"
-                        alt=""
-                      />
-                      <img
-                        className="inline-block rounded-full w-14 h-14 ring-2 ring-white"
-                        src="https://d33wubrfki0l68.cloudfront.net/8a2efb13f103a5ae2909e244380d73087a9c2fc4/31ed6/images/hero/3/avatar-female-2.png"
-                        alt=""
-                      />
+                    ))}
                     </div>
-
-                    <p className="mt-4 text-lg text-gray-900 lg:mt-0 lg:ml-4 font-pj">
-                      Join with{" "}
-                      <span className="font-bold">4600+ Learners </span> and
-                      Start Improving with Instant Feedback!
-                    </p>
+                  <div className="ml-6">
+                    <p className="text-2xl font-bold text-indigo-600">4,600+</p>
+                    <p className="text-sm font-medium text-gray-500">Active Learners</p>
                   </div>
                 </div>
 
-                <div className="mt-8 sm:flex sm:items-center sm:justify-center lg:justify-start sm:space-x-5 lg:mt-12">
-                  <Link
-                    to="/signin"
-                    title=""
-                    className="inline-flex items-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-gray-900 border border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 font-pj justif-center hover:bg-gray-600"
-                    role="button"
-                  >
-                    Get Started
-                  </Link>
-
-                  <Link
-                    to="/signup"
-                    title=""
-                    className="inline-flex items-center px-4 py-4 mt-4 text-lg font-bold transition-all duration-200 bg-transparent border border-transparent sm:mt-0 font-pj justif-center rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 hover:bg-gray-200 focus:bg-gray-200"
-                    role="button"
-                  >
-                    <svg
-                      className="w-5 h-5 mr-2"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2.5"
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                      ></path>
+                <div className="flex items-center p-6 bg-white rounded-2xl shadow-lg transform hover:-translate-y-1 transition-all duration-200">
+                  <div className="h-12 w-12 bg-green-100 rounded-xl flex items-center justify-center">
+                    <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                     </svg>
-                    Join Us Now
-                  </Link>
+                  </div>
+                  <div className="ml-6">
+                    <p className="text-2xl font-bold text-green-600">99%</p>
+                    <p className="text-sm font-medium text-gray-500">Success Rate</p>
+                  </div>
                 </div>
-              </div>
+              </motion.div>
+            </motion.div>
 
-              <div className="xl:col-span-3">
-                <img
-                  className="w-full mx-auto scale-110"
+            <motion.div
+              variants={itemVariants}
+              className="relative"
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1 }}
+                className="relative z-10"
+              >
+                <div className="relative">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="absolute -top-6 -left-6 w-24 h-24 bg-yellow-400 rounded-xl transform rotate-6"
+                  ></motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="absolute -bottom-6 -right-6 w-24 h-24 bg-indigo-400 rounded-xl transform -rotate-6"
+                  ></motion.div>
+                  
+                  <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden p-2">
+                    <img
                   src="https://d33wubrfki0l68.cloudfront.net/29c501c64b21014b3f2e225abe02fe31fd8f3a5c/f866d/images/hero/3/illustration.png"
-                  alt=""
+                      alt="Learning Platform"
+                      className="relative rounded-xl transform transition-transform duration-500 hover:scale-105"
                 />
               </div>
+
+                  {/* Floating Stats Card */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6 }}
+                    className="absolute -right-4 -bottom-4 bg-white rounded-xl p-4 shadow-xl"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center">
+                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">Progress</p>
+                        <p className="text-xl font-bold text-indigo-600">+87%</p>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* Achievement Badge */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.8 }}
+                    className="absolute -left-4 top-1/3 bg-white rounded-xl p-4 shadow-xl"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
+                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">Level</p>
+                        <p className="text-lg font-bold text-gray-900">Expert</p>
             </div>
+                    </div>
+                  </motion.div>
+                </div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
           </div>
         </section>
       </div>
-    </>
   );
 };
 
