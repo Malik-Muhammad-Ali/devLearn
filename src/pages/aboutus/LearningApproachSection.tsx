@@ -124,22 +124,6 @@ const LearningApproachSection = () => {
               </motion.div>
             ))}
           </motion.div>
-
-          <motion.div 
-            className="mt-20 text-center"
-            variants={fadeInUp}
-          >
-            <motion.button
-              className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center mx-auto"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <span className="mr-2">Explore Our Methodology</span>
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </motion.button>
-          </motion.div>
         </motion.div>
       </div>
     </section>

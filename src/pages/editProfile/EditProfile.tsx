@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {
+  FaUser,
+  FaUserTag,
+  FaLock,
+  FaEye,
+  FaEyeSlash,
+  FaEnvelope,
+} from "react-icons/fa";
 import useAppStore from "../../zustand/store";
+import "../signup/style.css";
 
-// Validation Schema
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   username: Yup.string().required("Username is required"),
@@ -28,9 +36,13 @@ const EditProfile = () => {
   const [preview, setPreview] = useState<string | null>(
     user?.profilePic || null
   );
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  // Handle Profile Picture Change
+  useEffect(() => {
+    setPreview(user?.profilePic || null);
+  }, [user]);
+
   const handleProfilePicChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     setFieldValue: any
@@ -42,21 +54,14 @@ const EditProfile = () => {
     }
   };
 
-  // Handle Update
   async function handleUpdate(values: any, { setSubmitting }: any) {
     const result = await updateUser(values, token);
-
     if (result.status === "success") {
       toast.success("Profile Updated Successfully!", {
         position: "top-right",
         autoClose: 3000,
       });
       setTimeout(() => navigate("/dashboard", { replace: true }), 3000);
-    } else if (result.status === "password incorrect") {
-      toast.error("Update Failed! Previous Password is incorrect", {
-        position: "top-right",
-        autoClose: 3000,
-      });
     } else {
       toast.error("Update Failed! Please try again.", {
         position: "top-right",
@@ -69,165 +74,181 @@ const EditProfile = () => {
   return (
     <>
       <ToastContainer />
-      <div className="min-h-screen flex justify-center items-center bg-gray-100 pt-10 pb-10">
-        <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-8">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-            Edit Profile
-          </h2>
+      <div className="signup-container relative min-h-screen">
+        <div className="form-container w-full max-w-2xl">
+          <div className="signup-card p-8 md:p-10 animate-fadeIn">
+            <div className="card-header text-center">
+              <h2 className="text-3xl font-bold text-slate-800 mb-2">
+                Edit Profile
+              </h2>
+            </div>
 
-          <Formik
-            initialValues={{
-              name: user?.name || "",
-              username: user?.username || "",
-              email: user?.email || "",
-              previousPassword: "",
-              password: "",
-              confirmPassword: "",
-              profilePic: null,
-            }}
-            validationSchema={validationSchema}
-            onSubmit={handleUpdate}
-          >
-            {({ setFieldValue, isSubmitting }) => (
-              <Form className="space-y-6">
-                {/* Profile Picture */}
-                <div className="flex flex-col items-center">
-                  <label className="relative cursor-pointer">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={(e) => handleProfilePicChange(e, setFieldValue)}
-                    />
-                    <div className="w-32 h-32 rounded-full border-4 border-gray-300 flex items-center justify-center overflow-hidden bg-gray-200 hover:opacity-80 transition transform hover:scale-105 shadow-md">
-                      {preview ? (
-                        <img
-                          src={preview}
-                          alt="Profile"
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <span className="text-gray-600">Upload</span>
-                      )}
+            <Formik
+              initialValues={{
+                name: user?.name || "",
+                username: user?.username || "",
+                email: user?.email || "",
+                previousPassword: "",
+                password: "",
+                confirmPassword: "",
+                profilePic: null,
+              }}
+              validationSchema={validationSchema}
+              onSubmit={handleUpdate}
+            >
+              {({ setFieldValue, isSubmitting }) => (
+                <Form className="space-y-5">
+                  <div className="flex flex-col items-center">
+                    <label className="relative cursor-pointer group">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) =>
+                          handleProfilePicChange(e, setFieldValue)
+                        }
+                      />
+                      <div className="w-24 h-24 rounded-full border-4 border-gray-300 flex items-center justify-center overflow-hidden bg-gray-100 shadow-md group-hover:shadow-lg transition-all">
+                        {preview ? (
+                          <img
+                            src={preview}
+                            alt="Profile"
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-gray-600 font-medium">
+                            Upload
+                          </span>
+                        )}
+                      </div>
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="relative">
+                      <div className="input-icon-container">
+                        <FaUser className="animated-icon" />
+                      </div>
+                      <Field
+                        className="form-input"
+                        name="name"
+                        type="text"
+                        placeholder="Name"
+                      />
+                      <ErrorMessage
+                        name="name"
+                        component="div"
+                        className="text-red-500 text-sm mt-1"
+                      />
                     </div>
-                  </label>
-                  <p className="text-sm text-gray-500 mt-2">
-                    Click to change profile picture
-                  </p>
-                </div>
+                    <div className="relative">
+                      <div className="input-icon-container">
+                        <FaUserTag className="animated-icon" />
+                      </div>
+                      <Field
+                        className="form-input"
+                        name="username"
+                        type="text"
+                        placeholder="Username"
+                      />
+                      <ErrorMessage
+                        name="username"
+                        component="div"
+                        className="text-red-500 text-sm mt-1"
+                      />
+                    </div>
+                  </div>
 
-                {/* Name Field */}
-                <div>
-                  <label className="block text-gray-700 font-medium">
-                    Name
-                  </label>
-                  <Field
-                    type="text"
-                    name="name"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 outline-none"
-                  />
-                  <ErrorMessage
-                    name="name"
-                    component="p"
-                    className="text-red-500 text-sm mt-1"
-                  />
-                </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="relative">
+                      <div className="input-icon-container">
+                        <FaEnvelope className="animated-icon" />
+                      </div>
+                      <Field
+                        className="form-input bg-gray-100 cursor-not-allowed"
+                        value={user?.email}
+                        name="email"
+                        type="email"
+                        placeholder="Email"
+                        disabled
+                      />
+                    </div>
+                    <div className="relative">
+                      <div className="input-icon-container">
+                        <FaLock className="animated-icon" />
+                      </div>
+                      <Field
+                        className="form-input"
+                        name="previousPassword"
+                        type="password"
+                        placeholder="Previous Password"
+                      />
+                      <ErrorMessage
+                        name="previousPassword"
+                        component="div"
+                        className="text-red-500 text-sm mt-1"
+                      />
+                    </div>
+                  </div>
 
-                {/* Username Field */}
-                <div>
-                  <label className="block text-gray-700 font-medium">
-                    Username
-                  </label>
-                  <Field
-                    type="text"
-                    name="username"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 outline-none"
-                  />
-                  <ErrorMessage
-                    name="username"
-                    component="p"
-                    className="text-red-500 text-sm mt-1"
-                  />
-                </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="relative">
+                      <div className="input-icon-container">
+                        <FaLock className="animated-icon" />
+                      </div>
+                      <Field
+                        className="form-input"
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="New Password"
+                      />
+                      <ErrorMessage
+                        name="password"
+                        component="div"
+                        className="text-red-500 text-sm mt-1"
+                      />
+                    </div>
+                    <div className="relative">
+                      <div className="input-icon-container">
+                        <FaLock className="animated-icon" />
+                      </div>
+                      <Field
+                        className="form-input"
+                        name="confirmPassword"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Confirm Password"
+                      />
+                      <ErrorMessage
+                        name="confirmPassword"
+                        component="div"
+                        className="text-red-500 text-sm mt-1"
+                      />
+                    </div>
+                  </div>
 
-                {/* Email Field (Read-only) */}
-                <div>
-                  <label className="block text-gray-700 font-medium">
-                    Email
-                  </label>
-                  <Field
-                    type="email"
-                    name="email"
-                    disabled
-                    value={user?.email}
-                    className="w-full px-4 py-2 border border-gray-300 bg-gray-100 text-gray-500 rounded-md outline-none cursor-not-allowed"
-                  />
-                </div>
-
-                {/* Previous Password Field */}
-                <div>
-                  <label className="block text-gray-700 font-medium">
-                    Previous Password
-                  </label>
-                  <Field
-                    type="password"
-                    name="previousPassword"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 outline-none"
-                  />
-                  <ErrorMessage
-                    name="previousPassword"
-                    component="p"
-                    className="text-red-500 text-sm mt-1"
-                  />
-                </div>
-
-                {/* New Password Field */}
-                <div>
-                  <label className="block text-gray-700 font-medium">
-                    New Password
-                  </label>
-                  <Field
-                    type="password"
-                    name="password"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 outline-none"
-                  />
-                  <ErrorMessage
-                    name="password"
-                    component="p"
-                    className="text-red-500 text-sm mt-1"
-                  />
-                </div>
-
-                {/* Confirm Password Field */}
-                <div>
-                  <label className="block text-gray-700 font-medium">
-                    Confirm Password
-                  </label>
-                  <Field
-                    type="password"
-                    name="confirmPassword"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 outline-none"
-                  />
-                  <ErrorMessage
-                    name="confirmPassword"
-                    component="p"
-                    className="text-red-500 text-sm mt-1"
-                  />
-                </div>
-
-                {/* Submit Button */}
-                <div className="text-center">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600"
-                  >
-                    {isSubmitting ? "Updating..." : "Save Changes"}
-                  </button>
-                </div>
-              </Form>
-            )}
-          </Formik>
+                  <div className="mt-8">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="signup-button pulse w-full flex justify-center text-white p-4 rounded-lg tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
+                    >
+                      {isSubmitting ? (
+                        <div className="flex items-center">
+                          <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Updating...
+                        </div>
+                      ) : (
+                        "Save Changes"
+                      )}
+                    </button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
         </div>
       </div>
     </>

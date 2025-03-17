@@ -140,20 +140,6 @@ const MissionSection = () => {
               </motion.div>
             ))}
           </div>
-          
-          <motion.div 
-            className="mt-20 text-center"
-            variants={fadeInUp}
-          >
-            <motion.button
-              className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ duration: 0.2 }}
-            >
-              Join Our Mission
-            </motion.button>
-          </motion.div>
         </motion.div>
       </div>
     </section>

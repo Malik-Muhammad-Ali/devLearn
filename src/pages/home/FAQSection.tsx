@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const FAQSection = () => {
@@ -178,32 +178,6 @@ const FAQSection = () => {
               </div>
             </motion.div>
           ))}
-        </motion.div>
-
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="mt-16 text-center"
-        >
-          <motion.div
-            variants={itemVariants}
-            className="inline-flex items-center space-x-2 text-gray-600"
-          >
-            <span>Still have questions?</span>
-            <motion.a
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              href="/contact"
-              className="inline-flex items-center px-6 py-3 text-base font-bold text-indigo-600 bg-indigo-50 rounded-xl hover:bg-indigo-100 transition-all duration-200"
-            >
-              Contact Support
-              <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </motion.a>
-          </motion.div>
         </motion.div>
       </div>
     </section>

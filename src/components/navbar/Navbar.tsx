@@ -112,18 +112,11 @@ const Navbar = () => {
                       alt="User Profile"
                       className="relative w-10 h-10 rounded-full border-2 border-indigo-500 object-cover transition-all duration-300"
                     />
-                    {/* Online indicator */}
-                    <motion.div
-                      className="absolute bottom-0 right-0 h-3 w-3 bg-green-500 rounded-full border-2 border-white"
-                      animate={{ scale: [1, 1.1, 1] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    ></motion.div>
                   </div>
                   <div className="ml-3 hidden md:block">
                     <p className="text-sm font-medium text-gray-800">
-                      {user.name?.split(" ")[0]}
+                      {user.name}
                     </p>
-                    <p className="text-xs text-gray-500">Online</p>
                   </div>
                 </motion.button>
 
