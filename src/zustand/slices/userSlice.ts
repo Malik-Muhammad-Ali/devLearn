@@ -3,6 +3,7 @@ import api from "../../services/api";
 
 export interface UserState {
   user: {
+    _id: string;
     name: string;
     email: string;
     username: string;
@@ -30,7 +31,7 @@ export interface UserState {
   logout: () => void;
 }
 
-export const userSlice: StateCreator<UserState> = (set, get, store) => ({
+export const userSlice: StateCreator<UserState> = (set, get) => ({
   user: null,
   token: null,
   setUser: (user: any, token: string) => {

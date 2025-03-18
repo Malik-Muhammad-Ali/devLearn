@@ -1,4 +1,3 @@
-import React from 'react';
 
 // Define CSS animation in a global style
 const HeroSection = () => {

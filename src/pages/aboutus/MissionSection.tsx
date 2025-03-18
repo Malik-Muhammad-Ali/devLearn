@@ -1,6 +1,5 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { fadeInUp, staggerContainer } from './animations';
+import { fadeInUp } from './animations';
 
 // Simplified animation variants for cards
 const cardVariants = {
@@ -108,7 +107,7 @@ const MissionSection = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
             {missions.map((mission, index) => (
               <motion.div 
-                key={mission.title}
+                key={index}
                 className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300"
                 variants={cardVariants}
                 whileHover={{ y: -5 }}

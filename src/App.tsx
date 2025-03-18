@@ -8,6 +8,7 @@ import Home from "./pages/home/Home";
 import Aboutus from "./pages/aboutus/Aboutus";
 import Dashboard from "./pages/dashboard/Dashboard";
 import EditProfile from "./pages/editProfile/EditProfile";
+import QuizGeneration from "./pages/quiz/QuizGeneration";
 
 // Components
 import Navbar from "./components/navbar/Navbar";
@@ -38,6 +39,10 @@ function App() {
         <Route
           path="/edit-profile"
           element={<ProtectedRoute element={<EditProfile />} />}
+        />
+        <Route
+          path="/quiz-generation"
+          element={<ProtectedRoute element={<QuizGeneration />} />}
         />
       </Routes>
     </Router>

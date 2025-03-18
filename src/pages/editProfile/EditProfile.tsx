@@ -36,7 +36,9 @@ const EditProfile = () => {
   const [preview, setPreview] = useState<string | null>(
     user?.profilePic || null
   );
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPreviousPassword, setShowPreviousPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -130,7 +132,7 @@ const EditProfile = () => {
                         <FaUser className="animated-icon" />
                       </div>
                       <Field
-                        className="form-input"
+                        className="form-input focus:outline-none"
                         name="name"
                         type="text"
                         placeholder="Name"
@@ -146,7 +148,7 @@ const EditProfile = () => {
                         <FaUserTag className="animated-icon" />
                       </div>
                       <Field
-                        className="form-input"
+                        className="form-input focus:outline-none"
                         name="username"
                         type="text"
                         placeholder="Username"
@@ -165,7 +167,7 @@ const EditProfile = () => {
                         <FaEnvelope className="animated-icon" />
                       </div>
                       <Field
-                        className="form-input bg-gray-100 cursor-not-allowed"
+                        className="form-input bg-gray-100 cursor-not-allowed focus:outline-none"
                         value={user?.email}
                         name="email"
                         type="email"
@@ -178,11 +180,18 @@ const EditProfile = () => {
                         <FaLock className="animated-icon" />
                       </div>
                       <Field
-                        className="form-input"
+                        className="form-input pr-16 focus:outline-none"
                         name="previousPassword"
-                        type="password"
+                        type={showPreviousPassword ? "text" : "password"}
                         placeholder="Previous Password"
                       />
+                      <button
+                        type="button"
+                        className="absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        onClick={() => setShowPreviousPassword(!showPreviousPassword)}
+                      >
+                        {showPreviousPassword ? <FaEyeSlash /> : <FaEye />}
+                      </button>
                       <ErrorMessage
                         name="previousPassword"
                         component="div"
@@ -197,11 +206,18 @@ const EditProfile = () => {
                         <FaLock className="animated-icon" />
                       </div>
                       <Field
-                        className="form-input"
+                        className="form-input pr-16 focus:outline-none"
                         name="password"
-                        type={showPassword ? "text" : "password"}
+                        type={showNewPassword ? "text" : "password"}
                         placeholder="New Password"
                       />
+                      <button
+                        type="button"
+                        className="absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        onClick={() => setShowNewPassword(!showNewPassword)}
+                      >
+                        {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+                      </button>
                       <ErrorMessage
                         name="password"
                         component="div"
@@ -213,11 +229,18 @@ const EditProfile = () => {
                         <FaLock className="animated-icon" />
                       </div>
                       <Field
-                        className="form-input"
+                        className="form-input pr-16 focus:outline-none"
                         name="confirmPassword"
-                        type={showPassword ? "text" : "password"}
+                        type={showConfirmPassword ? "text" : "password"}
                         placeholder="Confirm Password"
                       />
+                      <button
+                        type="button"
+                        className="absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      >
+                        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                      </button>
                       <ErrorMessage
                         name="confirmPassword"
                         component="div"

@@ -2,6 +2,28 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FiPlusCircle, FiBook, FiTrendingUp, FiCheck, FiX, FiAward, FiTarget } from 'react-icons/fi';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Navigate } from 'react-router-dom';
+import useAppStore from '../../zustand/store';
+import { useNavigate } from 'react-router-dom';
+
+interface DashboardStats {
+  totalQuizzes: number;
+  passedQuizzes: number;
+  failedQuizzes: number;
+  averageScore: number;
+  highestStreak: number;
+  bestScore: number;
+}
+
+interface PerformanceData {
+  date: string;
+  score: number;
+}
+
+interface ChartData {
+  name: string;
+  score: number;
+}
 
 interface StatCardProps {
   title: string;
@@ -30,29 +52,89 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color }) => {
 };
 
 const Dashboard = () => {
-  // Mock data - replace with actual data from your backend
-  const stats = {
-    totalQuizzes: 80,
-    passedQuizzes: 62,
-    failedQuizzes: 18,
-    averageScore: 83,
-    highestStreak: 12,
-    bestScore: 98
-  };
+  const navigate = useNavigate();
+  const { user, token } = useAppStore();
+  const userId = user?._id;
 
-  // Generate smoother performance trend data
-  const chartData = Array.from({ length: 12 }, (_, i) => {
-    // Create a smoother curve with less variation
-    const baseScore = 78;
-    const trend = Math.sin(i * 0.8) * 12; // Smoother wave pattern
-    const improvement = i * 0.5; // Slight upward trend
-    const score = Math.min(98, Math.max(65, Math.round(baseScore + trend + improvement)));
-    
-    return {
-      name: 'Quizzes',
-      score: score
-    };
+  console.log('User data:', { user, token, userId });
+  const [stats, setStats] = React.useState<DashboardStats>({
+    totalQuizzes: 0,
+    passedQuizzes: 0,
+    failedQuizzes: 0,
+    averageScore: 0,
+    highestStreak: 0,
+    bestScore: 0
   });
+
+  const [chartData, setChartData] = React.useState<ChartData[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState('');
+
+  React.useEffect(() => {
+    const fetchDashboardStats = async () => {
+      try {
+        if (!user || !token || !userId) {
+          setError('Authentication required');
+          setLoading(false);
+          return;
+        }
+
+        const response = await fetch('https://devlearnbackend.up.railway.app/api/dashboard/stats', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'User-ID': userId
+          }
+        });
+        if (!response.ok) throw new Error('Failed to fetch dashboard data');
+        
+        const data = await response.json();
+        if (!data.success) throw new Error(data.error || 'Failed to fetch dashboard data');
+
+        setStats({
+          totalQuizzes: data.data.totalQuizzes,
+          passedQuizzes: data.data.passedQuizzes,
+          failedQuizzes: data.data.failedQuizzes,
+          averageScore: Number(data.data.averageScore),
+          highestStreak: data.data.highestStreak,
+          bestScore: data.data.bestScore
+        });
+
+        // Transform performance trend data for the chart
+        const transformedChartData = data.data.performanceTrend.map((item: PerformanceData) => ({
+          name: new Date(item.date).toLocaleDateString(),
+          score: item.score
+        }));
+        setChartData(transformedChartData);
+        setLoading(false);
+      } catch (err) {
+        console.error('Dashboard data fetch error:', err);
+        setError('Failed to load dashboard data');
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardStats();
+  }, []);
+
+  if (!user || !token || !userId) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (loading) {
+    return (
+      <div className="pt-28 px-8 pb-8 max-w-7xl mx-auto flex items-center justify-center">
+        <div className="text-gray-600">Loading dashboard data...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="pt-28 px-8 pb-8 max-w-7xl mx-auto flex items-center justify-center">
+        <div className="text-red-600">{error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="pt-28 px-8 pb-8 max-w-7xl mx-auto">
@@ -185,7 +267,7 @@ const Dashboard = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => {
-                  // Add your create quiz logic here
+                  navigate('/quiz-generation');
                 }}
               >
                 <FiPlusCircle className="text-xl" />

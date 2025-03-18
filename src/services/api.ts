@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:6001/api",
+  baseURL: "https://devlearnbackend.up.railway.app/api",
 });
 
 export default api;

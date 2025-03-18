@@ -1,4 +1,3 @@
-import React from 'react';
 
 // Learning approach steps
 export const learningSteps = [
